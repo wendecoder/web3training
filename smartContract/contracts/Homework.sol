@@ -6,19 +6,22 @@ contract InefficientExample {
     mapping(address => uint256) public balances;
     address[] public users;
 
-    function calculateTotalValue() public returns (uint256) {
-        totalValue = 0;
+    function calculateTotalValue() public view returns (uint256) {
+        uint256 totalValue = 0;
         for (uint256 i = 0; i < users.length; i++) {
             totalValue += balances[users[i]];
         }
         return totalValue;
     }
+    
+
 
     function addItem(uint256 value) public {
         balances[msg.sender] += value;
-        users.push(msg.sender);
-        itemCount++; 
+        // users.push(msg.sender);
+        // itemCount++; 
     }
+    
 
     string[] public items;
 
@@ -30,9 +33,9 @@ contract InefficientExample {
 
     function addItemWithEvent(uint256 value, string memory itemName) public {
         balances[msg.sender] += value;
-        users.push(msg.sender);
-        items.push(itemName);
-        itemCount++;
+        // users.push(msg.sender);
+        // items.push(itemName);
+        // itemCount++;
         emit ItemAdded(msg.sender, value, itemName);
     }
 
