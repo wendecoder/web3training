@@ -8,7 +8,7 @@ import { privateKeyToAccount } from "viem/accounts";
 dotenv.config();
 
 // import { abi, bytecode } from "../artifacts/contracts/launchpad.sol/LaunchContract.json"
-import { abi, bytecode } from "../artifacts/contracts/Homework.sol/InefficientExample.json"
+import { abi, bytecode } from "../artifacts/contracts/Homework.sol/EfficientExample.json"
 // const providerApiKey = process.env.ALCHEMY_API_KEY || "";
 const deployerPrivateKey = process.env.PRIVATE_KEY || "";
 
