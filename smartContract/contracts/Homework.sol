@@ -10,8 +10,8 @@ contract EfficientExample {
     struct Product {
         uint256 id;
         uint256 price;
-        string name;
         bool available;
+        string name;
     }
 
     Product[] public products;
@@ -35,13 +35,13 @@ contract EfficientExample {
         items.push(itemName);
     }
 
-    function addItemWithEvent(uint256 value, string memory itemName) public {
+    function addItemWithEvent(uint256 value, string calldata itemName) external {
         addItem(value);
-        addItemName(itemName);
+        items.push(itemName);
         emit ItemAdded(msg.sender, value, itemName);
     }
 
-    function addProduct(uint256 id, uint256 price, string memory name, bool available) public {
-        products.push(Product(id, price, name, available));
+    function addProduct(uint256 id, uint256 price, string calldata name, bool available) external {
+        products.push(Product(id, price, available, name));
     }
 }
