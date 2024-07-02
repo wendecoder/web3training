@@ -1,39 +1,42 @@
+// SPDX-License-Identifier: MIT 
 pragma solidity ^0.8.0;
 
-contract InefficientExample {
+contract OptimizedExample {
     uint256 public totalValue;
     uint256 public itemCount;
     mapping(address => uint256) public balances;
-    address[] public users;
 
-    function calculateTotalValue() public returns (uint256) {
-        totalValue = 0;
-        for (uint256 i = 0; i < users.length; i++) {
-            totalValue += balances[users[i]];
-        }
+    // Removed the users array to save gas
+    // address[] public users; 
+
+    // Keeping totalValue updated directly within addItem and addItemWithEvent
+    function calculateTotalValue() public view returns (uint256) { // Changed to view to save gas
         return totalValue;
     }
 
     function addItem(uint256 value) public {
         balances[msg.sender] += value;
-        users.push(msg.sender);
-        itemCount++; 
-    }
-
-    string[] public items;
-
-    function addItemName(string memory itemName) public {
-        items.push(itemName);
-    }
-
-    event ItemAdded(address indexed user, uint256 value, string itemName);
-
-    function addItemWithEvent(uint256 value, string memory itemName) public {
-        balances[msg.sender] += value;
-        users.push(msg.sender);
-        items.push(itemName);
+        totalValue += value; // Update totalValue directly
+        // users.push(msg.sender); // Removed to save gas
         itemCount++;
-        emit ItemAdded(msg.sender, value, itemName);
+    }
+
+    // Use mapping to store item names to avoid dynamic array resizing
+    mapping(uint256 => string) public items;
+
+    function addItemName(uint256 itemId, string memory itemName) public {
+        items[itemId] = itemName;
+    }
+
+    event ItemAdded(address indexed user, uint256 value, uint256 itemId, string itemName);
+
+    function addItemWithEvent(uint256 value, uint256 itemId, string memory itemName) public {
+        balances[msg.sender] += value;
+        totalValue += value; // Update totalValue directly
+        // users.push(msg.sender); // Removed to save gas
+        items[itemId] = itemName;
+        itemCount++;
+        emit ItemAdded(msg.sender, value, itemId, itemName);
     }
 
     struct Product {
