@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
 contract VeryInefficientContract {
@@ -5,24 +6,21 @@ contract VeryInefficientContract {
     uint256 public count;
     uint256[] public data;
 
-    // This function does not use view or pure when it could
-    function getSum() public returns (uint256) {
+    // This function uses view since it does not modify the state
+    function getSum() public view returns (uint256) {
         uint256 sum = 0;
         for (uint256 i = 0; i < data.length; i++) {
             sum += data[i];
-            totalSum += data[i]; // Unnecessary state change within the loop
         }
-        totalSum = sum; // Unnecessary state change
         return sum;
     }
 
-    // This function changes state unnecessarily within a loop
+    // This function changes state efficiently
     function addData(uint256[] memory newData) public {
         for (uint256 i = 0; i < newData.length; i++) {
             data.push(newData[i]);
-            count++; // Unnecessary state change within a loop
         }
-        count += newData.length; // Another unnecessary state change
+        count += newData.length;
     }
 
     // Inefficient storage of strings
@@ -40,11 +38,11 @@ contract VeryInefficientContract {
         _;
     }
 
-    function getData(uint256 index) public checkCount(index) returns (uint256) {
+    function getData(uint256 index) public view checkCount(index) returns (uint256) {
         return data[index];
     }
 
-    // Inefficient packing of variables
+    // Efficient packing of variables
     struct User {
         uint256 id;
         uint256 balance;
